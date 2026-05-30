@@ -1,4 +1,4 @@
-<img width="1672" height="941" alt="TOFFY" src="https://github.com/user-attachments/assets/124536ca-d5fa-409f-a60f-bff603b69ac5" />
+
 # Toffy Daily Rewards
 
 Simple and customizable daily rewards script!
@@ -6,7 +6,7 @@ Simple and customizable daily rewards script!
 **Framework Support:**
 - Qbox
 - QBCore
-
+<img width="1672" height="941" alt="TOFFY" src="https://github.com/user-attachments/assets/124536ca-d5fa-409f-a60f-bff603b69ac5" />
 **Inventory Support:**
 - ox_inventory
 - qb-inventory 
