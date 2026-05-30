@@ -10,13 +10,13 @@ Config.Language = "en" -- "tr" (Turkish) or "en" (English) for server-side notif
 
 -- Theme Colors (Easy to customize!)
 Config.Theme = {
-    Primary = "#be2edd",          -- Ana renk (mor)
-    Success = "#2ecc71",          -- Başarı rengi (yeşil)
-    Danger = "#e74c3c",           -- Hata rengi (kırmızı)
-    Gold = "#f1c40f",             -- Premium rengi (altın)
-    BackgroundDark = "#0a0b0d",   -- Arka plan koyu
-    PanelBackground = "#101115",  -- Panel arka plan
-    CardBackground = "#14151a"    -- Kart arka plan
+    Primary = "#be2edd",          
+    Success = "#2ecc71",          
+    Danger = "#e74c3c",           
+    Gold = "#f1c40f",             
+    BackgroundDark = "#0a0b0d",   
+    PanelBackground = "#101115", 
+    CardBackground = "#14151a"    
 }
 
 
