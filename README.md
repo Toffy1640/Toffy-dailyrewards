@@ -1,3 +1,4 @@
+https://discord.gg/aMMWYXe9
 
 # Toffy Daily Rewards
 
