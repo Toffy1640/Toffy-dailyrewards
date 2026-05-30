@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'Toffy Daily Rewards - Premium Purple UI Daily Reward System'
+description 'Toffy Daily Rewards'
 author 'Toffy'
 version '1.0.0'
 
