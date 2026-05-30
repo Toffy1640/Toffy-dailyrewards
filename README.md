@@ -10,6 +10,8 @@ Simple and customizable daily rewards script!
 **Inventory Support:**
 - ox_inventory
 - qb-inventory 
+**Dependencies:**
+- ox_lib (Required)
 
 **Features:**
 - Easy theme customization from config
