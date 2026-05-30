@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toffy Daily Rewards</title>
+   
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" v-cloak>
+        <div id="rewards-screen" v-show="showMenu" class="screen-container">
+            
+            
+            <div class="dashboard-wrapper">
+                
+                
+                <div class="top-header-bar">
+                    
+                    
+                    <div class="header-left">
+                        <h1 class="logo-title" v-html="t('logo_reward')"></h1>
+                        
+                        <div class="timer-capsule">
+                            <span class="capsule-day">{{ t('day') }} {{ status.currentDay }}</span>
+                            <span class="capsule-divider">|</span>
+                            <span class="capsule-timer">{{ status.canClaim ? t('ready') : formattedTimeLeft }}</span>
+                            <span class="capsule-label">{{ t('next_reward') }}</span>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="header-center">
+                        <div class="redeem-input-wrapper">
+                            <i class="fas fa-gift icon-gift"></i>
+                            <input type="text" v-model="redeemCodeInput" :placeholder="t('enter_code')" 
+                                   @keyup.enter="submitRedeemCode" :disabled="status.isPremium">
+                            <button class="redeem-btn" @click="submitRedeemCode" v-if="!status.isPremium && redeemCodeInput">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                   
+                    <div class="header-right">
+                        
+                        
+                        <div class="tier-toggle-pill">
+                            <button class="tier-btn" :class="{ active: activeRewardTier === 'basic' }" @click="toggleRewardTier('basic')">
+                                {{ t('basic') }}
+                            </button>
+                            <button class="tier-btn" :class="{ active: activeRewardTier === 'premium' }" @click="toggleRewardTier('premium')">
+                                {{ t('premium') }}
+                            </button>
+                        </div>
+
+                        
+                        
+                        <div class="crown-badge" :class="{ active: status.isPremium }" :title="t('premium_membership')">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        
+                        
+                        <div class="player-profile-card" :class="{ 'premium-profile': status.isPremium }">
+                            <div class="avatar-box">
+                                <i class="fas" :class="status.isPremium ? 'fa-user-astronaut' : 'fa-user'"></i>
+                            </div>
+                            <span class="player-name">{{ status.playerName || t('loading') }}</span>
+                        </div>
+                        
+                        
+                        <button class="exit-door-btn" @click="closeMenu" :title="t('close')">
+                            <i class="fas fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                
+                <div class="grid-scroll-box">
+                    <div class="rewards-grid">
+                        <div v-for="dayNum in 30" :key="dayNum" class="day-card"
+                             :class="{ 
+                                'claimed': isDayClaimed(dayNum), 
+                                'active': isDayActive(dayNum),
+                                'locked': isDayLocked(dayNum),
+                                'today': isCurrentDay(dayNum),
+                                'premium-locked-card': activeRewardTier === 'premium' && !status.isPremium
+                             }">
+                            
+                            
+                            <div class="card-head-row">
+                                <span class="card-day-label">{{ t('day') }} {{ dayNum }}</span>
+                                <span class="card-box-indicator">
+                                    <i class="fas" :class="activeRewardTier === 'premium' ? 'fa-gem gold-badge' : 'fa-box'"></i>
+                                </span>
+                            </div>
+                            
+                         
+                            <div class="card-image-container" v-if="getRewardForDay(dayNum)">
+                                <img :src="getItemImageUrl(getRewardForDay(dayNum).item)" 
+                                     :alt="getRewardForDay(dayNum).label"
+                                     class="item-icon-img"
+                                     @error="onImageError">
+                                
+                                <div class="premium-lock-badge" v-if="activeRewardTier === 'premium' && !status.isPremium">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="card-description-row" v-if="getRewardForDay(dayNum)">
+                                <span class="item-name">{{ getRewardForDay(dayNum).label }}</span>
+                                <span class="item-qty">x{{ getRewardForDay(dayNum).amount }}</span>
+                            </div>
+                            
+                            
+                            <div class="card-action-row">
+                                <button class="collect-btn" 
+                                        :disabled="!isDayActive(dayNum)"
+                                        @click="claimRewardAction(dayNum)">
+                                    {{ 
+                                        isDayClaimed(dayNum) 
+                                            ? t('collected') 
+                                            : (activeRewardTier === 'premium' && !status.isPremium 
+                                                ? t('locked') 
+                                                : (isDayActive(dayNum) 
+                                                    ? t('collect') 
+                                                    : (isCurrentDay(dayNum) 
+                                                        ? t('cooldown') 
+                                                        : t('locked'))))
+                                    }}
+                                </button>
+                            </div>
+                            
+                           
+                            <div class="claimed-card-overlay" v-if="isDayClaimed(dayNum)">
+                                <i class="fas fa-circle-check success-check-icon"></i>
+                                <span class="claimed-overlay-text">{{ t('collected') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+           
+            <div class="alert-toast" v-if="alert.show" :class="alert.type">
+                <i class="fas" :class="alert.icon"></i>
+                <div class="alert-content">
+                    <h4>{{ alert.title }}</h4>
+                    <p>{{ alert.message }}</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+    <script src="app.js"></script>
+</body>
+</html>
