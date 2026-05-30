@@ -7,9 +7,11 @@ Simple and customizable daily rewards script!
 - Qbox
 - QBCore
 <img width="1672" height="941" alt="TOFFY" src="https://github.com/user-attachments/assets/124536ca-d5fa-409f-a60f-bff603b69ac5" />
+
 **Inventory Support:**
 - ox_inventory
 - qb-inventory 
+
 **Dependencies:**
 - ox_lib (Required)
 
