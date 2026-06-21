@@ -1,5 +1,4 @@
-https://discord.gg/aMMWYXe9
-
+https://discord.gg/qYKvV9PF
 # Toffy Daily Rewards
 
 Simple and customizable daily rewards script!
